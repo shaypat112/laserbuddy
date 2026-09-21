@@ -24,26 +24,26 @@ export default function LaserScene({ progressRef, reducedMotion }) {
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
     renderer.outputColorSpace = THREE.SRGBColorSpace
     renderer.shadowMap.enabled = true
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap
+    renderer.shadowMap.type = THREE.PCFShadowMap
     mount.appendChild(renderer.domElement)
 
-    scene.add(new THREE.HemisphereLight(0xffffff, 0x252018, 2.5))
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x161616, 2.5))
     const key = new THREE.DirectionalLight(0xffffff, 5)
     key.position.set(-4, -3, 8)
     key.castShadow = true
     scene.add(key)
-    const rim = new THREE.DirectionalLight(0xff2b20, 7)
+    const rim = new THREE.DirectionalLight(0x9a9a9a, 6)
     rim.position.set(6, 2, 1)
     scene.add(rim)
 
     const group = new THREE.Group()
     scene.add(group)
     const loader = new STLLoader()
-    const cream = new THREE.MeshStandardMaterial({ color: 0xe8e4d8, roughness: 0.52, metalness: 0.08 })
-    const dark = new THREE.MeshStandardMaterial({ color: 0x1d1d1a, roughness: 0.62, metalness: 0.12 })
-    const acid = new THREE.MeshStandardMaterial({ color: 0xd7ff36, roughness: 0.5, metalness: 0.03 })
-    const red = new THREE.MeshBasicMaterial({ color: 0xff2b20, transparent: true, opacity: 0.85 })
-    const mats = [cream, dark, acid, dark]
+    const cream = new THREE.MeshStandardMaterial({ color: 0xf2f2ef, roughness: 0.4, metalness: 0.18 })
+    const dark = new THREE.MeshStandardMaterial({ color: 0x272727, roughness: 0.58, metalness: 0.22 })
+    const silver = new THREE.MeshStandardMaterial({ color: 0x8d8d8a, roughness: 0.32, metalness: 0.62 })
+    const beamMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.62 })
+    const mats = [cream, dark, silver, dark]
     let whole = null
     const pieces = []
 
@@ -87,12 +87,12 @@ export default function LaserScene({ progressRef, reducedMotion }) {
       })
     })
 
-    const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.035, 4, 10, 1, true), red)
+    const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.035, 4, 10, 1, true), beamMaterial)
     beam.rotation.x = Math.PI / 2
     beam.position.set(0.65, -1.65, 0.45)
     scene.add(beam)
 
-    const dot = new THREE.Mesh(new THREE.SphereGeometry(0.075, 20, 20), red)
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(0.075, 20, 20), beamMaterial)
     dot.position.set(0.65, -3.55, 0.45)
     scene.add(dot)
 
@@ -116,11 +116,11 @@ export default function LaserScene({ progressRef, reducedMotion }) {
     observer.observe(mount)
     resize()
 
-    const clock = new THREE.Clock()
+    const startedAt = performance.now()
     let frame
     const render = () => {
       frame = requestAnimationFrame(render)
-      const time = clock.getElapsedTime()
+      const time = (performance.now() - startedAt) / 1000
       const p = progressRef.current || 0
       const explode = ease((p - 0.35) / 0.16)
       const reassemble = ease((p - 0.63) / 0.12)
