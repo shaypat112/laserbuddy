@@ -1,0 +1,9 @@
+opencv-python
+numpy
+pyserial
+anthropic
+# voice (optional, for --voice)
+sounddevice
+faster-whisper
+requests
+pyttsx3
