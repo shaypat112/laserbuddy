@@ -20,8 +20,9 @@ export default function LaserScene({ progressRef, reducedMotion }) {
     const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100)
     camera.position.set(4.8, -5.8, 3.8)
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
+    const mobile = matchMedia('(max-width: 800px)').matches
+    const renderer = new THREE.WebGLRenderer({ antialias: !mobile, alpha: true, powerPreference: 'high-performance' })
+    renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1 : 1.5))
     renderer.outputColorSpace = THREE.SRGBColorSpace
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = THREE.PCFShadowMap

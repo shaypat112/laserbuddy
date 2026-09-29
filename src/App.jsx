@@ -6,10 +6,12 @@ import CadScene from './CadScene'
 import wiringDiagram from '../docs/wiring.svg'
 
 const chapters = [
-  { id: 'mechanical', n: '01', label: 'Mechanical' },
-  { id: 'cad', n: '02', label: 'CAD' },
-  { id: 'wiring', n: '03', label: 'Wiring' },
-  { id: 'demo', n: '04', label: 'In Action' },
+  { id: 'vision', n: '01', label: 'Vision' },
+  { id: 'software', n: '02', label: 'Software' },
+  { id: 'mechanical', n: '03', label: 'Hardware' },
+  { id: 'cad', n: '04', label: 'CAD' },
+  { id: 'wiring', n: '05', label: 'Wiring' },
+  { id: 'demo', n: '06', label: 'In Action' },
 ]
 
 export default function App() {
@@ -64,17 +66,70 @@ export default function App() {
       <section className="hero panel" id="hero">
         <div className="kicker"><span>DESK-SCALE BUILD ASSISTANT</span><span>2026 / LASERBUDDY</span></div>
         <div className="hero-copy">
-          <p className="eyebrow">It sees the parts. It hears the plan.</p>
+          <p className="eyebrow">A camera-aware lab TA for your breadboard.</p>
           <h1>LASER<br/><span>BUDDY</span></h1>
-          <p className="lede">A physical AI companion that points to the exact part you need—and talks you through what comes next.</p>
+          <p className="lede">LaserBuddy maps what you actually built, checks it against the plan, talks you through the fix, and puts a laser dot on the exact hole you need next.</p>
         </div>
         <div className="scroll-cue"><span>SCROLL TO DISASSEMBLE</span><i /></div>
         <div className="hero-index">LB—01</div>
       </section>
 
+      <section className="vision-section" id="vision">
+        <div className="vision-intro">
+          <p className="section-tag">Computer vision · 01</p>
+          <h2>It measures.<br/><em>Then it thinks.</em></h2>
+          <p>Coordinates never come from a guess. OpenCV finds the board, straightens the camera view, and resolves every detected component against the breadboard’s physical grid. AI identifies the part—not its position.</p>
+        </div>
+        <div className="pipeline" aria-label="Image processing pipeline">
+          <article><span>01 / REGISTER</span><b>Find the board</b><p>Anchor detection solves a camera-to-board homography in millimetres.</p></article>
+          <article><span>02 / RECTIFY</span><b>Straighten the view</b><p>Perspective is removed before components and endpoints are measured.</p></article>
+          <article><span>03 / MAP</span><b>Resolve the holes</b><p>Blobs snap to named board locations and electrical nodes—not loose pixels.</p></article>
+          <article><span>04 / TRACK</span><b>Keep stable IDs</b><p>Parts persist across frames, reducing flicker and repeated identification.</p></article>
+        </div>
+        <div className="truth-strip">
+          <div><span>MEASURED</span><strong>position · size · angle · nodes · faults</strong></div>
+          <div><span>INFERRED</span><strong>part identity · printed value · confidence</strong></div>
+        </div>
+      </section>
+
+      <section className="software-section" id="software">
+        <div className="software-copy">
+          <p className="section-tag">Live workspace · 02</p>
+          <h2>Your bench,<br/><em>understood.</em></h2>
+          <p>Track the board, inspect the detector’s view, rotate the 3D assembly, and move through a verified build plan. The assistant can check progress, describe the board, find a part, or point the laser at a named location.</p>
+          <ul>
+            <li><b>Plan vs reality</b><span>Placed, misplaced, missing, or extra</span></li>
+            <li><b>Electrical awareness</b><span>A20 and E20 correctly count as the same node</span></li>
+            <li><b>Calibrated aiming</b><span>RMS error reported in millimetres and hole pitch</span></li>
+          </ul>
+        </div>
+        <div className="macbook" aria-label="Simulation of the LaserBuddy software running on a laptop">
+          <div className="laptop-lid">
+            <div className="camera-dot" />
+            <div className="app-window">
+              <div className="app-top"><b>LASERBUDDY</b><span>BOARD ONLINE</span><i>● LIVE</i></div>
+              <div className="app-body">
+                <aside><small>PROJECT</small><strong>LED blink</strong><nav><b>01</b><span>Place resistor</span><b>02</b><span>Seat LED</span><b>03</b><span>Connect ground</span></nav><button>Ask LaserBuddy</button></aside>
+                <div className="board-view">
+                  <div className="scan-grid" />
+                  <div className="breadboard">
+                    {Array.from({ length: 54 }, (_, i) => <i key={i} />)}
+                    <div className="sim-resistor"><span /></div>
+                    <div className="laser-target"><span>E20</span></div>
+                  </div>
+                  <div className="detection-card"><span>PART 04</span><b>220 Ω resistor</b><small>E20 → E25 · 98.4%</small></div>
+                </div>
+                <aside className="guidance"><small>NEXT STEP</small><strong>Place the resistor</strong><p>Move one lead to the electrical node at column 20.</p><div><span>LASER</span><b>0.74 mm RMS</b></div><button>Point at E20</button></aside>
+              </div>
+            </div>
+          </div>
+          <div className="laptop-base"><i /></div>
+        </div>
+      </section>
+
       <section className="chapter mechanical" id="mechanical">
         <div className="chapter-copy left">
-          <p className="section-tag">Mechanical · 01</p>
+          <p className="section-tag">Hardware · 03</p>
           <h2>Two axes.<br/>One precise<br/><em>pointer.</em></h2>
           <p className="body-copy">A compact pan/tilt head turns two SG92R micro servos into a physical cursor for your workbench. Every printed part is press-fit—no bolts, no tools, no drama.</p>
           <div className="spec-grid">
@@ -90,7 +145,7 @@ export default function App() {
         <div className="cad-sticky">
           <CadScene progressRef={cadProgressRef} reducedMotion={reducedMotion} />
           <div className="cad-heading">
-            <p className="section-tag">CAD · 02</p>
+            <p className="section-tag">CAD · 04</p>
             <h2>Designed to<br/><em>fit first.</em></h2>
             <p>The actual printable geometry transitions from the finished assembly into its four production parts as you scroll.</p>
           </div>
@@ -110,7 +165,7 @@ export default function App() {
 
       <section className="wiring-section" id="wiring">
         <div className="wiring-heading">
-          <p className="section-tag">Wiring · 03</p>
+          <p className="section-tag">Wiring · 05</p>
           <h2>Seven wires.<br/><em>One shared ground.</em></h2>
         </div>
         <div className="wiring-3d"><WiringScene /></div>
@@ -131,7 +186,7 @@ export default function App() {
           <div className="demo-vignette" />
           <div className="demo-hud top"><span>LIVE WORKSPACE</span><span>CAM 01 / OVERHEAD → USER POV → DISPLAY</span></div>
           <div className="demo-title">
-            <p className="section-tag">In action · 04</p>
+            <p className="section-tag">In action · 06</p>
             <h2>It points.<br/><em>You build.</em></h2>
           </div>
           <div className="target-readout">
@@ -139,6 +194,12 @@ export default function App() {
           </div>
         </div>
       </section>
+      <footer>
+        <a className="footer-brand" href="#hero"><span className="brand-dot" />LASERBUDDY</a>
+        <p>Measured guidance for real hardware.</p>
+        <a href="https://github.com/Panchangam30/laser-buddy-cam" target="_blank" rel="noreferrer">VIEW SOURCE ↗</a>
+        <div className="makers"><span>CAMERA → BOARD MAP → GUIDANCE → LASER</span><strong>OPEN SOURCE</strong></div>
+      </footer>
     </main>
   )
 }

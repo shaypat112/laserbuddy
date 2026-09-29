@@ -10,8 +10,9 @@ export default function WiringScene() {
     const camera = new THREE.PerspectiveCamera(36, 1, .1, 40)
     camera.position.set(7, 6.4, 8)
     camera.lookAt(0, 0, 0)
-    const renderer = new THREE.WebGLRenderer({ antialias:true })
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.outputColorSpace = THREE.SRGBColorSpace
+    const mobile = matchMedia('(max-width: 800px)').matches
+    const renderer = new THREE.WebGLRenderer({ antialias:!mobile, powerPreference:'high-performance' })
+    renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1 : 1.5)); renderer.outputColorSpace = THREE.SRGBColorSpace
     renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap
     mount.appendChild(renderer.domElement)
     scene.add(new THREE.HemisphereLight(0xffffff, 0x0b0b0b, 2.3))

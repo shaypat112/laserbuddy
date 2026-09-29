@@ -15,7 +15,8 @@ export default function CadScene({progressRef,reducedMotion}){
   useEffect(()=>{
     const mount=mountRef.current,scene=new THREE.Scene();scene.background=new THREE.Color(0x080808)
     const camera=new THREE.PerspectiveCamera(34,1,.1,50);camera.position.set(6,-7,5)
-    const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.shadowMap.enabled=true;mount.appendChild(renderer.domElement)
+    const mobile=matchMedia('(max-width: 800px)').matches
+    const renderer=new THREE.WebGLRenderer({antialias:!mobile,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,mobile?1:1.5));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.shadowMap.enabled=!mobile;mount.appendChild(renderer.domElement)
     scene.add(new THREE.HemisphereLight(0xffffff,0x101010,2.8));const key=new THREE.DirectionalLight(0xffffff,6);key.position.set(-5,-4,9);scene.add(key);const rim=new THREE.DirectionalLight(0x888888,5);rim.position.set(6,3,2);scene.add(rim)
     const loader=new STLLoader(),root=new THREE.Group();scene.add(root)
     const wholeMat=new THREE.MeshStandardMaterial({color:0xe9e9e5,roughness:.36,metalness:.25,transparent:true})

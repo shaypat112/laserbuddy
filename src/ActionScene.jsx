@@ -16,8 +16,9 @@ export default function ActionScene({ progressRef, reducedMotion }) {
     scene.fog = new THREE.Fog(0x050505, 10, 22)
 
     const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 50)
-    const renderer = new THREE.WebGLRenderer({ antialias: true })
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
+    const mobile = matchMedia('(max-width: 800px)').matches
+    const renderer = new THREE.WebGLRenderer({ antialias: !mobile, powerPreference: 'high-performance' })
+    renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1 : 1.5))
     renderer.outputColorSpace = THREE.SRGBColorSpace
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = THREE.PCFShadowMap
