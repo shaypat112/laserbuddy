@@ -3,6 +3,7 @@ import LaserScene from './LaserScene'
 import ActionScene from './ActionScene'
 import WiringScene from './WiringScene'
 import CadScene from './CadScene'
+import WorkbenchContent from './WorkbenchContent'
 import wiringDiagram from '../docs/wiring.svg'
 
 const chapters = [
@@ -54,7 +55,8 @@ export default function App() {
   }, [])
 
   return (
-    <main>
+    <main id="main">
+      <a className="skip-link" href="#software">Skip to product information</a>
       <div className="scene-wrap"><LaserScene progressRef={progressRef} reducedMotion={reducedMotion} /></div>
       <header className="topbar">
         <a className="brand" href="#hero"><span className="brand-dot" />LASERBUDDY</a>
@@ -66,9 +68,11 @@ export default function App() {
       <section className="hero panel" id="hero">
         <div className="kicker"><span>DESK-SCALE BUILD ASSISTANT</span><span>2026 / LASERBUDDY</span></div>
         <div className="hero-copy">
-          <p className="eyebrow">A camera-aware lab TA for your breadboard.</p>
+          <p className="eyebrow">Build your circuit with a guide beside you.</p>
           <h1>LASER<br/><span>BUDDY</span></h1>
-          <p className="lede">LaserBuddy maps what you actually built, checks it against the plan, talks you through the fix, and puts a laser dot on the exact hole you need next.</p>
+          <p className="lede">Laser Buddy Cam turns a view of your bench into a proposed assembly plan, shows the wiring in 3D, and helps you compare it with your real breadboard. Add configured voice guidance and an optional calibrated laser head for the next connection.</p>
+          <p className="site-note">This site introduces the local workbench through 3D illustrations. Camera tracking, AI assistance, projects, and hardware controls run in the complete local app.</p>
+          <div className="content-links"><a href="#getting-started">Install locally ↓</a><a href="#software">Explore the workbench ↓</a></div>
         </div>
         <div className="scroll-cue"><span>SCROLL TO DISASSEMBLE</span><i /></div>
         <div className="hero-index">LB—01</div>
@@ -78,38 +82,38 @@ export default function App() {
         <div className="vision-intro">
           <p className="section-tag">Computer vision · 01</p>
           <h2>It measures.<br/><em>Then it thinks.</em></h2>
-          <p>Coordinates never come from a guess. OpenCV finds the board, straightens the camera view, and resolves every detected component against the breadboard’s physical grid. AI identifies the part—not its position.</p>
+          <p>OpenCV finds the supported 830-point breadboard, straightens the camera view, and maps visible objects onto its known hole grid. AI labels component identity separately. Hidden terminals can still require inference and manual confirmation.</p>
         </div>
         <div className="pipeline" aria-label="Image processing pipeline">
-          <article><span>01 / REGISTER</span><b>Find the board</b><p>Anchor detection solves a camera-to-board homography in millimetres.</p></article>
+          <article><span>01 / REGISTER</span><b>Find the board</b><p>Board pose establishes a camera-to-board map for the supported profile.</p></article>
           <article><span>02 / RECTIFY</span><b>Straighten the view</b><p>Perspective is removed before components and endpoints are measured.</p></article>
-          <article><span>03 / MAP</span><b>Resolve the holes</b><p>Blobs snap to named board locations and electrical nodes—not loose pixels.</p></article>
+          <article><span>03 / MAP</span><b>Resolve the holes</b><p>Visible footprints and wire endpoints map to holes; modeled nodes guide comparison.</p></article>
           <article><span>04 / TRACK</span><b>Keep stable IDs</b><p>Parts persist across frames, reducing flicker and repeated identification.</p></article>
         </div>
         <div className="truth-strip">
-          <div><span>MEASURED</span><strong>position · size · angle · nodes · faults</strong></div>
-          <div><span>INFERRED</span><strong>part identity · printed value · confidence</strong></div>
+          <div><span>MEASURED</span><strong>visible geometry · position · size · angle</strong></div>
+          <div><span>INFERRED / MODELED</span><strong>identity · hidden leads · connectivity · possible issues</strong></div>
         </div>
       </section>
 
       <section className="software-section" id="software">
         <div className="software-copy">
-          <p className="section-tag">Live workspace · 02</p>
-          <h2>Your bench,<br/><em>understood.</em></h2>
-          <p>Track the board, inspect the detector’s view, rotate the 3D assembly, and move through a verified build plan. The assistant can check progress, describe the board, find a part, or point the laser at a named location.</p>
+          <p className="section-tag">Local workbench · 02</p>
+          <h2>Your bench,<br/><em>in view.</em></h2>
+          <p>In the local workbench, inspect the observed board beside the intended 3D build and follow ordered wiring steps. Configured assistance can explain a step, inspect progress, locate a part, or target a hole with connected hardware.</p>
           <ul>
-            <li><b>Plan vs reality</b><span>Placed, misplaced, missing, or extra</span></li>
-            <li><b>Electrical awareness</b><span>A20 and E20 correctly count as the same node</span></li>
-            <li><b>Calibrated aiming</b><span>RMS error reported in millimetres and hole pitch</span></li>
+            <li><b>Plan vs reality</b><span>Placed, misplaced, missing, not-yet-reached, unverified, or extra</span></li>
+            <li><b>Modeled connectivity</b><span>A20 and E20 share a terminal node; no voltage or continuity measurement</span></li>
+            <li><b>Calibrated aiming</b><span>Optional hardware; last calibration RMS error reported in millimeters</span></li>
           </ul>
         </div>
-        <div className="macbook" aria-label="Simulation of the LaserBuddy software running on a laptop">
+        <div className="macbook" role="img" aria-label="Illustrative local workbench screen, not a live camera or hardware session">
           <div className="laptop-lid">
             <div className="camera-dot" />
             <div className="app-window">
-              <div className="app-top"><b>LASERBUDDY</b><span>BOARD ONLINE</span><i>● LIVE</i></div>
+              <div className="app-top"><b>LASERBUDDY</b><span>LOCAL WORKBENCH</span><i>ILLUSTRATION</i></div>
               <div className="app-body">
-                <aside><small>PROJECT</small><strong>LED blink</strong><nav><b>01</b><span>Place resistor</span><b>02</b><span>Seat LED</span><b>03</b><span>Connect ground</span></nav><button>Ask LaserBuddy</button></aside>
+                <aside><small>PROJECT</small><strong>LED blink</strong><div className="mock-steps"><b>01</b><span>Place resistor</span><b>02</b><span>Seat LED</span><b>03</b><span>Connect ground</span></div><span className="mock-control">Ask LaserBuddy</span></aside>
                 <div className="board-view">
                   <div className="scan-grid" />
                   <div className="breadboard">
@@ -117,27 +121,30 @@ export default function App() {
                     <div className="sim-resistor"><span /></div>
                     <div className="laser-target"><span>E20</span></div>
                   </div>
-                  <div className="detection-card"><span>PART 04</span><b>220 Ω resistor</b><small>E20 → E25 · 98.4%</small></div>
+                  <div className="detection-card"><span>EXAMPLE PART</span><b>Resistor</b><small>Illustrative placement</small></div>
                 </div>
-                <aside className="guidance"><small>NEXT STEP</small><strong>Place the resistor</strong><p>Move one lead to the electrical node at column 20.</p><div><span>LASER</span><b>0.74 mm RMS</b></div><button>Point at E20</button></aside>
+                <aside className="guidance"><small>NEXT STEP</small><strong>Place the resistor</strong><p>Review the lead placement against the plan.</p><div><span>OPTIONAL LASER</span><b>Calibration required</b></div><span className="mock-control">Point at E20</span></aside>
               </div>
             </div>
           </div>
           <div className="laptop-base"><i /></div>
+          <p className="illustration-note">Illustration of the local app. Controls on this screen are part of the illustration.</p>
         </div>
+        <WorkbenchContent />
       </section>
 
       <section className="chapter mechanical" id="mechanical">
         <div className="chapter-copy left">
           <p className="section-tag">Hardware · 03</p>
-          <h2>Two axes.<br/>One precise<br/><em>pointer.</em></h2>
-          <p className="body-copy">A compact pan/tilt head turns two SG92R micro servos into a physical cursor for your workbench. Every printed part is press-fit—no bolts, no tools, no drama.</p>
+          <h2>Two axes.<br/>One optional<br/><em>pointer.</em></h2>
+          <p className="body-copy">A serial-connected Arduino head uses two servos and a switched laser to point at a requested breadboard hole. Connect the rig, run board tracking, and calibrate the camera-to-servo map before targeting.</p>
           <div className="spec-grid">
-            <div><strong>160°</strong><span>PAN RANGE</span></div>
-            <div><strong>140°</strong><span>TILT RANGE</span></div>
-            <div><strong>4</strong><span>PRINTED PARTS</span></div>
-            <div><strong>0</strong><span>BOLTS REQUIRED</span></div>
+            <div><strong>2</strong><span>SERVO AXES</span></div>
+            <div><strong>USB</strong><span>SERIAL CONNECTION</span></div>
+            <div><strong>RMS</strong><span>CALIBRATION ERROR</span></div>
+            <div><strong>15 s</strong><span>NO-COMMAND BEAM TIMEOUT</span></div>
           </div>
+          <p className="body-copy">Accuracy depends on setup. Recalibrate after moving the head or camera; movement is not automatically detected. Keep the beam away from eyes. The timeout is not an eye-safety certification.</p>
         </div>
       </section>
 
@@ -171,7 +178,7 @@ export default function App() {
         <div className="wiring-3d"><WiringScene /></div>
         <div className="wiring-panel">
           <div className="wiring-copy">
-            <span>ELECTRICAL / VERIFIED PINOUT</span>
+            <span>OPTIONAL HEAD / REPOSITORY WIRING</span>
             <h3>Signal in.<br/>Motion out.</h3>
             <p>Pan signal goes to D9. Tilt signal goes to D10. D7 switches the 650 nm laser through a PN2222 transistor and 1 kΩ resistor. Servos take external 5 V power; the Arduino and supply share ground.</p>
             <div className="pin-row"><b>D9</b><span>PAN</span><b>D10</b><span>TILT</span><b>D7</b><span>LASER</span></div>
@@ -184,14 +191,15 @@ export default function App() {
         <div className="demo-sticky">
           <ActionScene progressRef={demoProgressRef} reducedMotion={reducedMotion} />
           <div className="demo-vignette" />
-          <div className="demo-hud top"><span>LIVE WORKSPACE</span><span>CAM 01 / OVERHEAD → USER POV → DISPLAY</span></div>
+          <div className="demo-hud top"><span>3D PRODUCT ILLUSTRATION</span><span>OVERHEAD → USER POV → DISPLAY</span></div>
           <div className="demo-title">
             <p className="section-tag">In action · 06</p>
             <h2>It points.<br/><em>You build.</em></h2>
           </div>
           <div className="target-readout">
-            <span>PART LOCKED</span><b>220 Ω RESISTOR</b><small>CONFIDENCE 98.4%</small>
+            <span>ILLUSTRATIVE TARGET</span><b>RESISTOR</b><small>NO LIVE CAMERA OR HARDWARE</small>
           </div>
+          <p className="demo-caption">The complete local workbench combines camera mapping, configured assistance, and optional hardware. This animated scene illustrates that workflow.</p>
         </div>
       </section>
       <footer>
