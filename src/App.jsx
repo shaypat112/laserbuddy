@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
-import LaserScene from './LaserScene'
-import ActionScene from './ActionScene'
-import WiringScene from './WiringScene'
-import CadScene from './CadScene'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import WorkbenchContent from './WorkbenchContent'
 import wiringDiagram from '../docs/wiring.svg'
+
+const LaserScene = lazy(() => import('./LaserScene'))
+const ActionScene = lazy(() => import('./ActionScene'))
+const WiringScene = lazy(() => import('./WiringScene'))
+const CadScene = lazy(() => import('./CadScene'))
 
 const chapters = [
   { id: 'vision', n: '01', label: 'Vision' },
@@ -57,7 +58,7 @@ export default function App() {
   return (
     <main id="main">
       <a className="skip-link" href="#software">Skip to product information</a>
-      <div className="scene-wrap"><LaserScene progressRef={progressRef} reducedMotion={reducedMotion} /></div>
+      <div className="scene-wrap"><Suspense fallback={null}><LaserScene progressRef={progressRef} reducedMotion={reducedMotion} /></Suspense></div>
       <header className="topbar">
         <a className="brand" href="#hero"><span className="brand-dot" />LASERBUDDY</a>
         <nav aria-label="Project chapters">
@@ -150,7 +151,7 @@ export default function App() {
 
       <section className="cad-section" id="cad" ref={cadRef}>
         <div className="cad-sticky">
-          <CadScene progressRef={cadProgressRef} reducedMotion={reducedMotion} />
+          <Suspense fallback={null}><CadScene progressRef={cadProgressRef} reducedMotion={reducedMotion} /></Suspense>
           <div className="cad-heading">
             <p className="section-tag">CAD · 04</p>
             <h2>Designed to<br/><em>fit first.</em></h2>
@@ -175,7 +176,7 @@ export default function App() {
           <p className="section-tag">Wiring · 05</p>
           <h2>Seven wires.<br/><em>One shared ground.</em></h2>
         </div>
-        <div className="wiring-3d"><WiringScene /></div>
+        <div className="wiring-3d"><Suspense fallback={null}><WiringScene /></Suspense></div>
         <div className="wiring-panel">
           <div className="wiring-copy">
             <span>OPTIONAL HEAD / REPOSITORY WIRING</span>
@@ -189,7 +190,7 @@ export default function App() {
 
       <section className="demo-scene" id="demo" ref={demoRef}>
         <div className="demo-sticky">
-          <ActionScene progressRef={demoProgressRef} reducedMotion={reducedMotion} />
+          <Suspense fallback={null}><ActionScene progressRef={demoProgressRef} reducedMotion={reducedMotion} /></Suspense>
           <div className="demo-vignette" />
           <div className="demo-hud top"><span>3D PRODUCT ILLUSTRATION</span><span>OVERHEAD → USER POV → DISPLAY</span></div>
           <div className="demo-title">
